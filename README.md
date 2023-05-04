@@ -7,6 +7,7 @@ TTS for ROS 2 with several tools:
 - festival
 - gTTS
 - mpg321
+- mozilla tts
 
 ## Installation
 
@@ -17,6 +18,7 @@ $ sudo apt install speech-dispatcher -y
 $ sudo apt install festival festival-doc festvox-kdlpc16k festvox-ellpc11k festvox-italp16k festvox-itapc16k -y
 $ sudo pip3 install gTTS
 $ sudo apt install mpg321 -y
+$ sudo pip install TTS
 
 # clone
 $ cd ~/ros2_ws/src

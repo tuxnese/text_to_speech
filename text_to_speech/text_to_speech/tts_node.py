@@ -8,13 +8,16 @@ import rclpy
 from text_to_speech_interfaces.action import TTS
 from text_to_speech_interfaces.msg import Config
 
-from simple_node import Node
+from rclpy.node import Node
+from rclpy.action import ActionServer
+
 
 from .text_to_speech_tools import (
     ESpeakTtsTool,
     SpdSayTtsTool,
     FestivalTtsTool,
-    GTtsTtsTool
+    GTtsTtsTool,
+    MozillaTtsTool
 )
 
 
@@ -31,11 +34,12 @@ class TtsNode(Node):
             Config.ESPEAK: ESpeakTtsTool(),
             Config.SPD_SAY: SpdSayTtsTool(),
             Config.FESTIVAL: FestivalTtsTool(),
-            Config.GTTS: GTtsTtsTool()
+            Config.GTTS: GTtsTtsTool(),
+            Config.MOZILLA: MozillaTtsTool()
         }
 
         # action server
-        self.__action_server = self.create_action_server(TTS,
+        self.__action_server = ActionServer(self, TTS,
                                                          "tts",
                                                          execute_callback=self.__execute_server,
                                                          cancel_callback=self.__cancel_callback
@@ -85,7 +89,7 @@ def main(args=None):
 
     node = TtsNode()
 
-    node.join_spin()
+    rclpy.spin(node)
 
     rclpy.shutdown()
 
