@@ -2,6 +2,10 @@
 from text_to_speech_interfaces.action import TTS
 from subprocess import Popen, PIPE, call
 from .tts_tool import TtsTool
+import os.path
+
+def fileExists(path) :
+    return os.path.isfile(path)
 
 models = {
     "it" : {
@@ -14,23 +18,22 @@ models = {
     }
 }
 
-gtts_file = "/tmp/gtts_tmp_file.mp3"
-
-
 class MozillaTtsTool(TtsTool):
 
     def say(self, request: TTS.Goal) -> Popen:
-        call(
-            args=["tts",
-                  "--text", "'" + request.text + "'",
-                  "--model_name", models[request.config.language][request.config.gender],
-                  "--out_path",  gtts_file,
-                  ],
-            stdout=PIPE,
-            start_new_session=True)
+        tts_file = "/tmp/" + request.text + ".mp3"
+        if not fileExists(tts_file):
+            call(
+                args=["tts",
+                    "--text", "'" + request.text + "'",
+                    "--model_name", models[request.config.language][request.config.gender],
+                    "--out_path",  tts_file,
+                    ],
+                stdout=PIPE,
+                start_new_session=True)
         return Popen(
             args=["aplay",
-                  gtts_file
+                  tts_file
                   ],
             stdout=PIPE,
             start_new_session=True)

@@ -29,6 +29,7 @@ class TtsNode(Node):
         super().__init__("tts_node")
 
         self.__process = None
+        self.__cancelled = False
 
         self.__tools_dict = {
             Config.ESPEAK: ESpeakTtsTool(),
@@ -46,6 +47,7 @@ class TtsNode(Node):
                                                          )
 
     def __cancel_callback(self):
+        self.__cancelled = True
         if self.__process:
             while self.__process == "started":
                 time.sleep(0.05)
@@ -74,8 +76,7 @@ class TtsNode(Node):
         self.__process = self.__tools_dict[request.config.tool].say(request)
         self.__process.wait()
 
-        if self.__action_server.is_canceled():
-            self.__action_server.wait_for_canceling()
+        if self.__cancelled:
             goal_handle.canceled()
 
         else:
