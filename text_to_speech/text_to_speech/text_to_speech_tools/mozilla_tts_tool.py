@@ -2,10 +2,7 @@
 from text_to_speech_interfaces.action import TTS
 from subprocess import Popen, PIPE, call
 from .tts_tool import TtsTool
-import os.path
-
-def fileExists(path) :
-    return os.path.isfile(path)
+from .utilities import getFilePathAndCreateFolders, fileExists
 
 models = {
     "it" : {
@@ -21,7 +18,7 @@ models = {
 class MozillaTtsTool(TtsTool):
 
     def say(self, request: TTS.Goal) -> Popen:
-        tts_file = "/tmp/" + request.text + ".mp3"
+        tts_file = getFilePathAndCreateFolders("mozzilla_tts", request, "wav")
         if not fileExists(tts_file):
             call(
                 args=["tts",
