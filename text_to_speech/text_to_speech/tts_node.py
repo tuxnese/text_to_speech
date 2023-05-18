@@ -41,7 +41,7 @@ class TtsNode(Node):
 
         # action server
         self.__action_server = ActionServer(self, TTS,
-                                                         "tts",
+                                                         "say",
                                                          execute_callback=self.__execute_server,
                                                          cancel_callback=self.__cancel_callback
                                                          )
