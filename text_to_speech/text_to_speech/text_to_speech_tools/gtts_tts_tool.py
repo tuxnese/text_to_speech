@@ -64,7 +64,8 @@ class GTtsTtsTool(TtsTool):
         slow = False
         tts_file = getFilePathAndCreateFolders("google_tts", request, "mp3")
 
-        saveGoogleTSS(request, tts_file)
+        if not fileExists(tts_file):
+          saveGoogleTSS(request, tts_file)
 
         return Popen(
             args=["mpg321",
