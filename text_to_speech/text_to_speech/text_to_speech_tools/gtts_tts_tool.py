@@ -26,7 +26,10 @@ models = {
     },
 }
 
-client = texttospeech.TextToSpeechClient()
+try:
+    client = texttospeech.TextToSpeechClient()
+except:
+    client = None
 
 def saveGoogleTSS(request, file_path):
     # Instantiates a client
@@ -60,6 +63,8 @@ def saveGoogleTSS(request, file_path):
 class GTtsTtsTool(TtsTool):
 
     def say(self, request: TTS.Goal) -> Popen:
+        if not client:
+            return
 
         slow = False
         tts_file = getFilePathAndCreateFolders("google_tts", request, "mp3")
