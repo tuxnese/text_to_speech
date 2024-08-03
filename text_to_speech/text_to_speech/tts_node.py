@@ -1,6 +1,4 @@
-
 """ Text to Speech for ROS2 """
-
 import os
 import time
 import signal
@@ -74,6 +72,10 @@ class TtsNode(Node):
             return result
 
         self.__process = self.__tools_dict[request.config.tool].say(request)
+        if not self.__process:
+            goal_handle.canceled()
+            return result
+
         self.__process.wait()
 
         if self.__cancelled:

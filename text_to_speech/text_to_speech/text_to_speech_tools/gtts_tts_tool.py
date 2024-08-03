@@ -1,4 +1,3 @@
-
 from text_to_speech_interfaces.action import TTS
 from subprocess import Popen, PIPE
 from .tts_tool import TtsTool
@@ -32,6 +31,9 @@ except:
     client = None
 
 def saveGoogleTSS(request, file_path):
+    if not client:
+        return
+
     # Instantiates a client
 
     # Set the text input to be synthesized
@@ -63,11 +65,10 @@ def saveGoogleTSS(request, file_path):
 class GTtsTtsTool(TtsTool):
 
     def say(self, request: TTS.Goal) -> Popen:
-        if not client:
-            return
 
         slow = False
         tts_file = getFilePathAndCreateFolders("google_tts", request, "mp3")
+        print(tts_file)
 
         if not fileExists(tts_file):
           saveGoogleTSS(request, tts_file)
