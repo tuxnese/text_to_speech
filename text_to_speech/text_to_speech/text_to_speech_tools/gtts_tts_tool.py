@@ -67,11 +67,21 @@ class GTtsTtsTool(TtsTool):
     def say(self, request: TTS.Goal) -> Popen:
 
         slow = False
-        tts_file = getFilePathAndCreateFolders("google_tts", request, "mp3")
-        print(tts_file)
+        tts_file = None
 
-        if not fileExists(tts_file):
-          saveGoogleTSS(request, tts_file)
+        if len(request.text) < 100:
+            tts_file = getFilePathAndCreateFolders("google_tts", request, "mp3")
+            print(tts_file)
+       
+        
+        if not tts_file:
+            request_text = request.text
+            request.text = "too_long_file_name"
+            tts_file = getFilePathAndCreateFolders("google_tts", request, "mp3")
+            request.text = request_text
+            saveGoogleTSS(request, tts_file)
+        elif not fileExists(tts_file):
+            saveGoogleTSS(request, tts_file)
 
         return Popen(
             args=["mpg321",
